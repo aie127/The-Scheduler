@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeFrame Planner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <aside class="rail" aria-label="Primary navigation">
+      <button class="brand" aria-label="TimeFrame home">◷</button>
+      <nav class="rail-nav">
+        <button class="nav-icon active" aria-label="Dashboard" title="Dashboard" data-page="dashboard"><span aria-hidden="true">⌂</span></button>
+        <button class="nav-icon" aria-label="Calendar" title="Calendar" data-page="calendar"><span aria-hidden="true">▦</span></button>
+        <button class="nav-icon" aria-label="Tasks" title="Tasks" data-page="tasks"><span aria-hidden="true">☑</span></button>
+        <button class="nav-icon" aria-label="Inbox" title="Inbox" data-page="inbox"><span aria-hidden="true">▤</span></button>
+        <button class="nav-icon" aria-label="Settings" title="Settings" data-page="settings"><span aria-hidden="true">⚙</span></button>
+      </nav>
+      <button class="nav-icon user-rail" aria-label="Profile settings" title="Profile settings" data-page="settings">◉</button>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div class="brand-name">
+          <span class="brand-mark">◷</span>
+          <strong>TimeFrame</strong>
+        </div>
+
+        <div class="view-switcher" aria-label="View range">
+          <button data-range="Daily">Daily</button>
+          <button class="active" data-range="Weekly">Weekly</button>
+          <button data-range="Monthly">Monthly</button>
+        </div>
+
+        <div class="profile-actions">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <span class="theme-icon" id="themeIcon">◐</span>
+            <span id="themeLabel">Light</span>
+          </button>
+          <button class="notification-button" aria-label="Notifications">●</button>
+          <button class="avatar" id="avatarButton" aria-label="Open profile">JD</button>
+        </div>
+      </header>
+
+      <section class="heading-row">
+        <div>
+          <span class="welcome-eyebrow" id="welcomeEyebrow" hidden>WELCOME REMARKS</span>
+          <h1 id="pageTitle">My Calendar</h1>
+          <p id="pageSubtitle">A familiar, focused space to plan ahead.</p>
+        </div>
+        <div class="summary">
+          <div class="summary-block">
+            <span>Total worked today</span>
+            <strong><b id="hoursValue">3457</b> hours</strong>
+          </div>
+          <div class="summary-block">
+            <span>Total left</span>
+            <strong><b id="leftValue">90</b> hrs</strong>
+          </div>
+          <button class="add-button" id="addEventButton"><span>＋</span> Add Event</button>
+        </div>
+      </section>
+
+      <div class="dashboard-grid" id="dashboardPage">
+        <aside class="left-column">
+          <section class="panel mini-calendar">
+            <div class="calendar-heading">
+              <strong id="miniMonth">January 2026</strong>
+              <div>
+                <button class="plain-icon" id="prevMonth" aria-label="Previous month">‹</button>
+                <button class="plain-icon" id="nextMonth" aria-label="Next month">›</button>
+              </div>
+            </div>
+            <div class="weekdays">
+              <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+            </div>
+            <div class="mini-days" id="miniDays"></div>
+          </section>
+
+          <section class="panel checklist">
+            <div class="panel-heading">
+              <strong id="myCalendarTitle">My Calendar</strong>
+              <button class="plain-link" id="addMyTask">Add task <span>＋</span></button>
+            </div>
+            <div class="task-list" id="myTaskList"></div>
+          </section>
+
+          <section class="panel checklist">
+            <div class="panel-heading">
+              <strong id="otherCalendarTitle">Other Calendar</strong>
+              <button class="plain-link" id="addOtherTask">Add task <span>＋</span></button>
+            </div>
+            <div class="task-list" id="otherTaskList"></div>
+          </section>
+        </aside>
+
+        <section class="panel week-view" id="calendarView">
+          <div class="week-heading">
+            <strong id="weekTitle">My Calendar</strong>
+            <div>
+              <button class="today-button" id="todayButton">Today</button>
+              <button class="plain-icon" id="prevWeek" aria-label="Previous week">‹</button>
+              <button class="plain-icon" id="nextWeek" aria-label="Next week">›</button>
+            </div>
+          </div>
+          <div class="date-strip-scroll" id="dateStripScroll">
+            <div class="date-strip" id="dateStrip"></div>
+          </div>
+          <div class="schedule-scroll">
+            <div class="schedule-grid" id="scheduleGrid"></div>
+          </div>
+          <div class="month-grid-wrap" id="monthGridWrap" hidden></div>
+        </section>
+      </div>
+
+      <section class="content-page panel" id="tasksPage" hidden>
+        <div class="content-page-heading">
+          <div><h2>My tasks</h2><p>Keep your lists up to date.</p></div>
+          <button class="add-button" id="addTaskPageButton"><span>＋</span> Add task</button>
+        </div>
+        <div class="task-page-list" id="allTasksList"></div>
+      </section>
+
+      <section class="content-page panel" id="inboxPage" hidden>
+        <div class="content-page-heading"><div><h2>Upcoming</h2><p>Your next classes and reminders.</p></div></div>
+        <div class="inbox-list" id="inboxList"></div>
+      </section>
+
+      <section class="content-page panel" id="settingsPage" hidden>
+        <div class="content-page-heading"><div><h2>Personalize your planner</h2><p>Sign in to keep your own planner synced across devices.</p></div></div>
+        <section class="account-panel">
+          <div class="account-heading">
+            <div><h3>Your account</h3><p id="accountStatus">Checking account setup…</p></div>
+          </div>
+          <form id="accountForm" class="account-form">
+            <label>Email<input name="email" type="email" autocomplete="username" required placeholder="you@example.com"></label>
+            <label>Password<input name="password" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></label>
+            <label class="import-local-option" id="importLocalOption">
+              <input id="importLocalData" type="checkbox">
+              <span>Copy this device's guest planner into this account if it has no saved planner yet</span>
+            </label>
+            <div class="account-actions">
+              <button class="dialog-submit" id="signInButton" type="submit">Sign in</button>
+              <button class="secondary-button" id="signUpButton" type="button">Create account</button>
+            </div>
+          </form>
+          <button class="secondary-button" id="signOutButton" type="button" hidden>Sign out</button>
+        </section>
+        <form id="settingsForm" class="settings-form">
+          <label>Display name<input name="name" maxlength="32" placeholder="Your name"></label>
+          <label>My calendar name<input name="calendarTitle" maxlength="48" placeholder="My Calendar"></label>
+          <label>Other calendar name<input name="otherCalendarTitle" maxlength="48" placeholder="Other Calendar"></label>
+          <label>Accent color<input name="accentColor" type="color" value="#007aff"></label>
+          <label>Appearance
+            <select name="theme"><option value="light">Light</option><option value="dark">Dark</option></select>
+          </label>
+          <button class="dialog-submit" type="submit">Save preferences</button>
+        </form>
+        <section class="google-sync-panel" id="googleSyncPanel">
+          <div>
+            <h3>Google Calendar</h3>
+            <p id="googleSyncStatus">Checking connection…</p>
+            <small>Connect this account to its own separate “TimeFrame Planner” calendar.</small>
+          </div>
+          <div class="google-sync-actions">
+            <button type="button" class="dialog-submit" id="googleConnectButton">Connect Google Calendar</button>
+            <button type="button" class="plain-link" id="googleSyncButton" hidden>Sync now</button>
+            <button type="button" class="delete-button" id="googleDisconnectButton" hidden>Disconnect</button>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="eventDialog">
+    <form method="dialog" id="eventForm">
+      <div class="dialog-heading">
+        <strong>Add a new event</strong>
+        <button type="button" class="dialog-close" id="closeEventDialog" aria-label="Close">×</button>
+      </div>
+      <label>
+        Event name
+        <input name="title" required placeholder="Morning run">
+      </label>
+      <label>
+        Instructor / details
+        <input name="instructor" placeholder="Optional">
+      </label>
+      <label>
+        Day
+        <select name="day">
+          <option value="0">Monday</option>
+          <option value="1">Tuesday</option>
+          <option value="2">Wednesday</option>
+          <option value="3">Thursday</option>
+          <option value="4">Friday</option>
+          <option value="5">Saturday</option>
+          <option value="6">Sunday</option>
+        </select>
+      </label>
+      <label>
+        Repeat
+        <select name="frequency">
+          <option value="weekly">Every week</option>
+          <option value="once">Just once</option>
+        </select>
+      </label>
+      <label id="eventDateField" hidden>
+        Date
+        <input name="date" type="date">
+      </label>
+      <label>
+        Starts at
+        <input name="start" type="time" min="07:00" max="19:30" value="09:00" required>
+      </label>
+      <label>
+        Ends at
+        <input name="end" type="time" min="07:30" max="20:00" value="10:00" required>
+      </label>
+      <label>
+        Location
+        <input name="location" placeholder="Optional">
+      </label>
+      <label>
+        Color
+        <select name="color">
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+          <option value="pink">Pink</option>
+          <option value="red">Red</option>
+          <option value="orange">Orange</option>
+          <option value="purple">Lavender</option>
+        </select>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="cancel-button" id="cancelEventButton">Cancel</button>
+        <button class="delete-button" id="deleteEventButton" type="button" hidden>Delete</button>
+        <button class="dialog-submit" id="saveEventButton" value="default">Add Event</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="taskDialog">
+    <form method="dialog" id="taskForm">
+      <div class="dialog-heading">
+        <strong id="taskDialogTitle">Add a task</strong>
+        <button type="button" class="dialog-close" id="closeTaskDialog" aria-label="Close">×</button>
+      </div>
+      <label>Task name<input name="title" required maxlength="80" placeholder="What do you need to do?"></label>
+      <label>List<select name="list"><option value="my">My Calendar</option><option value="other">Other Calendar</option></select></label>
+      <div class="dialog-actions">
+        <button type="button" class="cancel-button" id="cancelTaskButton">Cancel</button>
+        <button class="delete-button" id="deleteTaskButton" type="button" hidden>Delete</button>
+        <button class="dialog-submit" id="saveTaskButton" value="default">Save task</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
